@@ -158,7 +158,7 @@
         <!-- Tabela de Amortização -->
         <section class="bg-white rounded-lg shadow-md p-6">
             <h2 class="text-xl font-bold excel-green-text mb-4 border-b-2 excel-green-border pb-2">
-                TABELA DE AMORTIZAÇÃO
+                TABELA DE AMORTIZAÇÃO - MAIS CONSIG PROMOTORA
             </h2>
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
@@ -541,7 +541,20 @@
                 
                 // Criar uma cópia da tabela
                 const tabelaClone = tabelaOriginal.cloneNode(true);
+                const theadClone = tabelaClone.querySelector('thead');
                 const tbodyClone = tabelaClone.querySelector('tbody');
+                
+                // Remover colunas SALDO DEVEDOR e AÇÕES do cabeçalho
+                const headerRow = theadClone.querySelector('tr');
+                const headerCells = headerRow.querySelectorAll('th');
+                // Remove as duas últimas colunas (SALDO DEVEDOR e AÇÕES)
+                // Salvar referências antes de remover
+                if (headerCells.length >= 2) {
+                    const acoesCell = headerCells[headerCells.length - 1]; // AÇÕES
+                    const saldoDevedorCell = headerCells[headerCells.length - 2]; // SALDO DEVEDOR
+                    acoesCell.remove(); // Remove AÇÕES primeiro
+                    saldoDevedorCell.remove(); // Remove SALDO DEVEDOR depois
+                }
                 
                 // Remover todas as linhas do clone
                 tbodyClone.innerHTML = '';
@@ -550,12 +563,19 @@
                 linhas.forEach((linha, index) => {
                     const numeroLinha = parseInt(linha.querySelector('td:first-child').textContent);
                     if (numeroLinha <= linhaNumero) {
-                        // Clonar a linha mas remover o botão de ações
+                        // Clonar a linha
                         const linhaClone = linha.cloneNode(true);
-                        const ultimaCelula = linhaClone.querySelector('td:last-child');
-                        if (ultimaCelula && ultimaCelula.querySelector('button')) {
-                            ultimaCelula.remove(); // Remove a coluna de ações
+                        const celulas = linhaClone.querySelectorAll('td');
+                        
+                        // Remover as duas últimas colunas (SALDO DEVEDOR e AÇÕES)
+                        // Salvar referências antes de remover
+                        if (celulas.length >= 2) {
+                            const acoesCell = celulas[celulas.length - 1]; // AÇÕES
+                            const saldoDevedorCell = celulas[celulas.length - 2]; // SALDO DEVEDOR
+                            acoesCell.remove(); // Remove AÇÕES primeiro
+                            saldoDevedorCell.remove(); // Remove SALDO DEVEDOR depois
                         }
+                        
                         tbodyClone.appendChild(linhaClone);
                     }
                 });
@@ -583,7 +603,7 @@
                 
                 // Adicionar título
                 const titulo = document.createElement('h2');
-                titulo.textContent = 'TABELA DE AMORTIZAÇÃO';
+                titulo.textContent = 'TABELA DE AMORTIZAÇÃO - MAIS CONSIG PROMOTORA';
                 titulo.style.color = '#00B050';
                 titulo.style.borderColor = '#00B050';
                 titulo.style.marginBottom = '0';
