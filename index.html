@@ -8,13 +8,13 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         .excel-green {
-            background-color: #00B050;
+            background-color: #2D65B8;
         }
         .excel-green-text {
-            color: #00B050;
+            color: #2D65B8;
         }
         .excel-green-border {
-            border-color: #00B050;
+            border-color: #2D65B8;
         }
     </style>
 </head>
@@ -39,7 +39,7 @@
                     <input 
                         type="text" 
                         id="margem" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="R$ 0,00"
                     >
                     <p class="text-xs text-gray-500 mt-1">Valor da parcela/PMT</p>
@@ -51,7 +51,7 @@
                     <input 
                         type="number" 
                         id="coeficiente" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="0.0225470"
                         step="0.0000001"
                         min="0"
@@ -65,7 +65,7 @@
                     <input 
                         type="text" 
                         id="iof" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="0,00%"
                     >
                     <p class="text-xs text-gray-500 mt-1">Porcentagem a ser somada</p>
@@ -77,7 +77,7 @@
                     <input 
                         type="number" 
                         id="prazo" 
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                         placeholder="96"
                         step="1"
                         min="1"
@@ -145,7 +145,7 @@
                 <input 
                     type="number" 
                     id="parcelaAtual" 
-                    class="w-full md:w-48 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                    class="w-full md:w-48 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                     placeholder="Digite o número da parcela"
                     step="1"
                     min="1"
@@ -217,33 +217,25 @@
         // Função para calcular a taxa de juros usando Newton-Raphson
         // Resolve: PV - PMT * [(1 - (1+i)^-n) / i] = 0
         const calcularTaxa = (nper, pmt, pv, maxIterations = 100, tolerance = 1e-10) => {
-            // Valor inicial: estimativa baseada em aproximação linear
             let rate = (pmt * nper - pv) / (pv * nper);
-            
-            // Garantir que a taxa inicial seja positiva e razoável
             if (rate <= 0 || rate > 1) {
-                rate = 0.01; // 1% como valor inicial padrão
+                rate = 0.01; 
             }
 
             for (let i = 0; i < maxIterations; i++) {
                 const onePlusRate = 1 + rate;
                 const onePlusRatePowN = Math.pow(onePlusRate, -nper);
-                
-                // Função: f(rate) = PV - PMT * [(1 - (1+rate)^-n) / rate]
                 const f = pv - pmt * ((1 - onePlusRatePowN) / rate);
-                
-                // Derivada: f'(rate) = PMT * [(1 - (1+rate)^-n) / rate^2 - n * (1+rate)^(-n-1) / rate]
                 const df = pmt * (
                     (1 - onePlusRatePowN) / (rate * rate) - 
                     (nper * Math.pow(onePlusRate, -nper - 1)) / rate
                 );
                 
-                // Verificar se a derivada é muito pequena (evitar divisão por zero)
+  
                 if (Math.abs(df) < tolerance) {
                     break;
                 }
-                
-                // Newton-Raphson: rate_new = rate_old - f(rate) / f'(rate)
+
                 const newRate = rate - f / df;
                 
                 // Verificar convergência
@@ -252,7 +244,7 @@
                     break;
                 }
                 
-                // Garantir que a taxa não fique negativa ou muito grande
+
                 if (newRate <= 0 || newRate > 1) {
                     break;
                 }
@@ -457,7 +449,7 @@
                         <td class="px-4 py-3 whitespace-nowrap text-center">
                             <button 
                                 onclick="capturarTabelaAteLinha(${linha.n}, this)"
-                                class="px-3 py-1 bg-green-600 hover:bg-green-700 text-white text-xs font-medium rounded-md transition-colors duration-200 flex items-center gap-1 mx-auto"
+                                class="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium rounded-md transition-colors duration-200 flex items-center gap-1 mx-auto"
                                 title="Capturar tabela até esta linha"
                             >
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -604,8 +596,8 @@
                 // Adicionar título
                 const titulo = document.createElement('h2');
                 titulo.textContent = 'TABELA DE AMORTIZAÇÃO - MAIS CONSIG PROMOTORA';
-                titulo.style.color = '#00B050';
-                titulo.style.borderColor = '#00B050';
+                titulo.style.color = '#2D65B8';
+                titulo.style.borderColor = '#2D65B8';
                 titulo.style.marginBottom = '0';
                 titulo.style.paddingBottom = '8px';
                 titulo.style.borderBottomWidth = '2px';
@@ -631,12 +623,12 @@
                 textoWrapper.style.padding = '20px';
                 textoWrapper.style.backgroundColor = '#f9fafb';
                 textoWrapper.style.borderRadius = '8px';
-                textoWrapper.style.border = '2px solid #00B050';
+                textoWrapper.style.border = '2px solid #2D65B8';
                 
                 // Título do painel
                 const painelTitulo = document.createElement('h3');
                 painelTitulo.textContent = 'Resumo';
-                painelTitulo.style.color = '#00B050';
+                painelTitulo.style.color = '#2D65B8';
                 painelTitulo.style.fontSize = '18px';
                 painelTitulo.style.fontWeight = 'bold';
                 painelTitulo.style.marginBottom = '15px';
@@ -654,7 +646,7 @@
                 valorPagando.textContent = formatCurrency(somaPrincipal);
                 valorPagando.style.fontSize = '18px';
                 valorPagando.style.fontWeight = 'bold';
-                valorPagando.style.color = '#00B050';
+                valorPagando.style.color = '#2D65B8';
                 pagandoAntecipado.appendChild(labelPagando);
                 pagandoAntecipado.appendChild(valorPagando);
                 textoWrapper.appendChild(pagandoAntecipado);
@@ -671,7 +663,7 @@
                 valorEconomia.textContent = formatCurrency(somaEconomia);
                 valorEconomia.style.fontSize = '18px';
                 valorEconomia.style.fontWeight = 'bold';
-                valorEconomia.style.color = '#00B050';
+                valorEconomia.style.color = '#2D65B8';
                 economia.appendChild(labelEconomia);
                 economia.appendChild(valorEconomia);
                 textoWrapper.appendChild(economia);
@@ -715,13 +707,13 @@
                         if (botaoElement) {
                             const textoOriginal = botaoElement.innerHTML;
                             botaoElement.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg> Copiado!';
-                            botaoElement.classList.remove('bg-green-600', 'hover:bg-green-700');
-                            botaoElement.classList.add('bg-green-500');
+                            botaoElement.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                            botaoElement.classList.add('bg-blue-500');
                             
                             setTimeout(() => {
                                 botaoElement.innerHTML = textoOriginal;
-                                botaoElement.classList.remove('bg-green-500');
-                                botaoElement.classList.add('bg-green-600', 'hover:bg-green-700');
+                                botaoElement.classList.remove('bg-blue-500');
+                                botaoElement.classList.add('bg-blue-600', 'hover:bg-blue-700');
                             }, 2000);
                         }
                     }).catch((err) => {
